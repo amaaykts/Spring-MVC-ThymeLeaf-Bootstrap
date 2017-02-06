@@ -1,0 +1,51 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--Где искать компоненты-->
+    <context:component-scan base-package="controller"/>
+
+    <!--Для Bootstrap-->
+    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
+    <!--<mvc:resources mapping="/webjars/**" location="/webjars/"/>-->
+
+    <!--ThymeLeaf-->
+    <bean id="templateResolver"
+          class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <!--<property name="suffix" value=".html" />--><!--Из-за этого не хотела открываться страница-->
+        <property name="characterEncoding" value="UTF-8"/>
+        <property name="templateMode" value="HTML5"/>
+    </bean>
+    <bean id="templateEngine"
+          class="org.thymeleaf.spring4.SpringTemplateEngine">
+        <property name="templateResolver" ref="templateResolver"/>
+    </bean>
+
+    <bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+        <property name="templateEngine" ref="templateEngine"/>
+        <property name="order" value="1"/>
+        <property name="characterEncoding" value="UTF-8"/>
+        <property name="viewNames" value="*.html,*.xhtml"/>
+    </bean>
+
+    <!--Стандартный ViewResolver-->
+    <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+    <!--&lt;!&ndash; Перед названием страницы добавляется prefix &ndash;&gt;-->
+    <!--<property name="prefix" value="/WEB-INF/pages/"/>-->
+    <!--&lt;!&ndash; После названия страницы добавляется suffix &ndash;&gt;-->
+    <!--<property name="suffix" value=".jsp"/>-->
+
+    <!--<property name="contentType" value="text/html; charset=utf-8"/>-->
+    <!--</bean>-->
+
+
+    <!--mvc:annotation-driven включает @RequestMapping, @RestController и т. д., т.е. те, которые нужны для работы каркаса spring-mvc-->
+    <!--Хотя вроде бы работало и без этого тэга-->
+    <mvc:annotation-driven/>
+</beans>
